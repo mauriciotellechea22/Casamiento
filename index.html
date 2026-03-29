@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mauricio & Maira — Nos Casamos 💍</title>
+  <meta name="description" content="Invitación al casamiento de Mauricio y Maira — 14 de Julio de 2026, Montevideo">
+  <meta name="theme-color" content="#2C2420">
+  <link rel="preload" as="image" href="assets/IMG_0783.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════ RESET & VARIABLES ═══════════════ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --cream: #F5E6D3;
+      --ivory: #FAF8F5;
+      --rose: #B76E79;
+      --rose-light: #d4949c;
+      --sage: #8B9E82;
+      --charcoal: #2C2C2C;
+      --warm-gray: #6B6560;
+      --gold: #C5A55A;
+      --gold-light: #E8D5A3;
+      --wax: #8B2E3B;
+      --paper: #e8d5bc;
+      --paper-dark: #c9a87c;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--ivory);
+      color: var(--charcoal);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.scrollable { overflow-y: auto; }
+    img { display: block; max-width: 100%; }
+
+    /* ═══════════════ TYPOGRAPHY ═══════════════ */
+    .script { font-family: 'Great Vibes', cursive; }
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* ═══════════════ ENVELOPE SCREEN ═══════════════ */
+    #envelope-screen {
+      position: fixed; inset: 0;
+      z-index: 1000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #2C2420 0%, #3a302a 40%, #2C2420 100%);
+      transition: opacity 0.8s ease;
+    }
+    #envelope-screen.fade-out { opacity: 0; pointer-events: none; }
+
+    /* Ambient floating particles */
+    .ambient-dot {
+      position: absolute; width: 3px; height: 3px;
+      border-radius: 50%; background: rgba(197,165,90,0.25);
+      animation: ambientFloat 5s ease-in-out infinite;
+    }
+    @keyframes ambientFloat {
+      0%,100% { transform: translateY(0) scale(1); opacity: 0.2; }
+      50% { transform: translateY(-25px) scale(1.3); opacity: 0.5; }
+    }
+
+    /* Envelope */
+    .envelope-wrapper {
+      position: relative; width: 280px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .envelope {
+      position: relative; width: 100%; height: 200px;
+      perspective: 800px;
+    }
+    .env-back {
+      position: absolute; inset: 0;
+      background: linear-gradient(145deg, #e6d2b5, #d4b896, #c9a87c);
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .env-lining {
+      position: absolute; top: 1px; left: 1px; right: 1px; height: 50%;
+      background: linear-gradient(180deg, #f0e4d4, #e8d5bc);
+      clip-path: polygon(0 0, 50% 90%, 100% 0);
+      border-radius: 5px 5px 0 0;
+    }
+    .env-card {
+      position: absolute; left: 8%; right: 8%; top: 12%; bottom: 8%;
+      background: var(--ivory);
+      border-radius: 4px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 6px; z-index: 1; padding: 10px;
+      transition: transform 0.9s cubic-bezier(0.23,1,0.32,1);
+    }
+    .env-card .card-ornament { color: var(--gold); font-size: 14px; letter-spacing: 6px; }
+    .env-card .card-names {
+      font-family: 'Great Vibes', cursive; font-size: 24px;
+      color: var(--charcoal); line-height: 1.1; text-align: center;
+    }
+    .env-card .card-names em { font-style: normal; font-size: 18px; color: var(--rose); }
+    .env-card .card-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px; letter-spacing: 3px; color: var(--warm-gray);
+      font-weight: 500;
+    }
+    .env-card.rise { transform: translateY(-85%); }
+    .env-front {
+      position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(160deg, #e0ccb0, #d4b896);
+      clip-path: polygon(0 48%, 50% 88%, 100% 48%, 100% 100%, 0 100%);
+      z-index: 2; border-radius: 0 0 6px 6px;
+    }
+    .env-flap {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(180deg, #c4a47a, #d4b896);
+      clip-path: polygon(0 0, 50% 48%, 100% 0);
+      transform-origin: top center; z-index: 4;
+      transition: transform 0.9s cubic-bezier(0.23,1,0.32,1);
+      backface-visibility: hidden;
+    }
+    .env-flap.open { transform: rotateX(-180deg); }
+
+    /* Wax seal */
+    .wax-seal {
+      position: absolute; z-index: 5;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 64px; height: 64px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #b34455, #8B2E3B 50%, #6d1f2d);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Great Vibes', cursive; font-size: 15px;
+      color: var(--gold-light); letter-spacing: 1px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.1),
+                  0 0 0 2px #5a1a25, 0 0 0 4px rgba(197,165,90,0.4);
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+    .wax-seal.break { transform: translate(-50%,-50%) scale(1.4) rotate(-8deg); opacity: 0; }
+
+    .open-hint {
+      margin-top: 30px; font-family: 'Cormorant Garamond', serif;
+      font-size: 15px; color: rgba(245,230,211,0.5);
+      letter-spacing: 2px; font-weight: 300;
+      animation: hintPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes hintPulse {
+      0%,100% { opacity: 0.4; } 50% { opacity: 0.8; }
+    }
+
+    /* ═══════════════ BURST PARTICLES ═══════════════ */
+    #burst-particles {
+      position: fixed; inset: 0; z-index: 1001;
+      pointer-events: none; overflow: hidden;
+    }
+    @keyframes burstFall {
+      0% { opacity: 0; transform: translateY(0) translateX(0) rotate(0deg); }
+      8% { opacity: 1; }
+      85% { opacity: 0.7; }
+      100% { opacity: 0; transform: translateY(100vh) translateX(var(--dx)) rotate(var(--rot)); }
+    }
+
+    /* ═══════════════ MAIN CONTENT ═══════════════ */
+    .hidden { display: none; }
+    #content { opacity: 0; max-width: 480px; margin: 0 auto; }
+    #content.show { animation: contentIn 1s ease-out forwards; }
+    @keyframes contentIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Divider ornament */
+    .ornament {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; padding: 8px 0; color: var(--gold);
+      font-size: 12px; letter-spacing: 4px;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; width: 50px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* ═══════════════ HERO ═══════════════ */
+    #hero {
+      text-align: center; padding: 50px 24px 30px;
+      background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+    }
+    .hero-names {
+      font-family: 'Great Vibes', cursive; font-size: 48px;
+      color: var(--charcoal); line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .hero-names span { color: var(--rose); font-size: 36px; display: block; margin: -4px 0; }
+    .hero-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-style: italic; font-weight: 300;
+      color: var(--warm-gray); line-height: 1.6;
+      margin: 20px 0 28px; padding: 0 10px;
+    }
+    .hero-photo {
+      position: relative; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+      margin: 0 auto; max-width: 380px;
+    }
+    .hero-photo img { width: 100%; display: block; }
+    .hero-photo::after {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid rgba(197,165,90,0.3); border-radius: 12px;
+      pointer-events: none;
+    }
+
+    /* Rings photo */
+    .rings-photo {
+      margin: 28px auto 0; max-width: 200px;
+      border-radius: 50%; overflow: hidden; aspect-ratio: 1;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1), 0 0 0 3px var(--gold-light);
+    }
+    .rings-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ═══════════════ DETAILS ═══════════════ */
+    #details {
+      text-align: center; padding: 40px 24px;
+      background: var(--ivory);
+    }
+    .detail-item {
+      margin-bottom: 24px;
+    }
+    .detail-icon {
+      font-size: 28px; margin-bottom: 6px; display: block;
+    }
+    .detail-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 500; margin-bottom: 2px;
+    }
+    .detail-item p {
+      font-size: 16px; color: var(--warm-gray); font-weight: 300;
+    }
+    .btn-calendar {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border: 1.5px solid var(--gold);
+      background: transparent; color: var(--charcoal);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 500; letter-spacing: 1px;
+      border-radius: 30px; cursor: pointer;
+      transition: all 0.3s ease; margin-top: 8px;
+    }
+    .btn-calendar:hover { background: var(--gold); color: white; }
+
+    /* ═══════════════ COUNTDOWN ═══════════════ */
+    #countdown {
+      position: relative; text-align: center;
+      padding: 50px 24px;
+      background: url('assets/IMG_0769.jpeg') center/cover no-repeat;
+      color: white;
+    }
+    #countdown::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(44,36,32,0.78);
+    }
+    #countdown > * { position: relative; z-index: 1; }
+    .countdown-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-weight: 300; letter-spacing: 2px;
+      opacity: 0.85;
+    }
+    .countdown-timer {
+      display: flex; justify-content: center; gap: 12px;
+      margin: 18px 0;
+    }
+    .count-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(197,165,90,0.3);
+      border-radius: 10px; padding: 14px 10px;
+      min-width: 65px; backdrop-filter: blur(4px);
+    }
+    .count-box .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 600; display: block;
+      color: var(--gold-light);
+    }
+    .count-box small {
+      font-size: 11px; text-transform: uppercase;
+      letter-spacing: 2px; opacity: 0.7; font-weight: 300;
+    }
+
+    /* ═══════════════ PHOTO DIVIDER ═══════════════ */
+    .photo-divider {
+      position: relative; width: 100%; height: 220px; overflow: hidden;
+    }
+    .photo-divider img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .photo-divider::before, .photo-divider::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 40px; z-index: 1;
+    }
+    .photo-divider::before {
+      top: 0; background: linear-gradient(to bottom, var(--ivory), transparent);
+    }
+    .photo-divider::after {
+      bottom: 0; background: linear-gradient(to top, var(--ivory), transparent);
+    }
+
+    /* ═══════════════ LOCATION ═══════════════ */
+    #location {
+      text-align: center; padding: 40px 24px;
+      background: var(--ivory);
+    }
+    #location h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 500; margin-bottom: 20px;
+    }
+    .map-wrap {
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 16px; aspect-ratio: 4/3;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: none; }
+    .location-address {
+      font-size: 15px; color: var(--warm-gray); margin-bottom: 16px;
+      line-height: 1.5; font-weight: 300;
+    }
+    .btn-map {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; background: var(--sage);
+      color: white; text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 500; letter-spacing: 1px;
+      border-radius: 30px; transition: all 0.3s ease;
+    }
+    .btn-map:hover { background: #7a8e72; transform: translateY(-1px); }
+
+    /* ═══════════════ GALLERY ═══════════════ */
+    #gallery {
+      padding: 40px 16px;
+      background: linear-gradient(180deg, var(--ivory), var(--cream));
+    }
+    #gallery h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 500;
+      text-align: center; margin-bottom: 24px;
+    }
+    .gallery-grid {
+      columns: 2; column-gap: 10px;
+    }
+    .gallery-grid .g-item {
+      break-inside: avoid; margin-bottom: 10px;
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+    .gallery-grid .g-item:hover { transform: scale(1.02); }
+    .gallery-grid .g-item img {
+      width: 100%; display: block;
+    }
+
+    /* ═══════════════ CELEBRATION ═══════════════ */
+    #celebration {
+      text-align: center; padding: 40px 24px;
+      background: var(--ivory);
+    }
+    .intimate-msg {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px; font-style: italic; font-weight: 300;
+      color: var(--warm-gray); line-height: 1.6;
+      margin-bottom: 30px; padding: 0 10px;
+    }
+    .dresscode h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 500; margin-bottom: 6px;
+    }
+    .dresscode p {
+      font-size: 17px; color: var(--warm-gray);
+      letter-spacing: 1px; font-weight: 400;
+    }
+
+    /* ═══════════════ RSVP ═══════════════ */
+    #rsvp {
+      text-align: center; padding: 50px 24px;
+      background: linear-gradient(180deg, var(--ivory), var(--cream));
+    }
+    #rsvp h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-weight: 500; margin-bottom: 20px;
+    }
+    .btn-rsvp {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white; text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px; font-weight: 600; letter-spacing: 1px;
+      border-radius: 40px;
+      box-shadow: 0 6px 25px rgba(37,211,102,0.3);
+      transition: all 0.3s ease;
+    }
+    .btn-rsvp:hover { transform: translateY(-2px); box-shadow: 0 10px 35px rgba(37,211,102,0.4); }
+
+    /* ═══════════════ FOOTER ═══════════════ */
+    footer {
+      text-align: center; padding: 40px 24px 100px;
+      background: var(--cream);
+    }
+    .footer-initials {
+      font-family: 'Great Vibes', cursive;
+      font-size: 42px; color: var(--rose);
+      margin-bottom: 6px;
+    }
+    footer .footer-date {
+      font-size: 14px; letter-spacing: 4px;
+      color: var(--warm-gray); font-weight: 300;
+      margin-bottom: 14px;
+    }
+    footer .footer-love {
+      font-size: 13px; color: var(--rose-light);
+      font-weight: 300;
+    }
+
+    /* ═══════════════ FLOATING CONTROLS ═══════════════ */
+    .music-btn {
+      position: fixed; top: 16px; right: 16px; z-index: 900;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      background: rgba(250,248,245,0.9); backdrop-filter: blur(8px);
+      font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .music-btn:hover { background: var(--gold); }
+    .music-btn.paused { opacity: 0.5; }
+
+    .fixed-rsvp {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 900; padding: 12px 16px;
+      background: rgba(250,248,245,0.95); backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(197,165,90,0.2);
+      display: flex; justify-content: center;
+    }
+    .fixed-rsvp a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white; text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 600; letter-spacing: 1px;
+      border-radius: 30px; width: 100%; max-width: 340px;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(37,211,102,0.25);
+      transition: all 0.3s ease;
+    }
+    .fixed-rsvp a:hover { transform: translateY(-1px); }
+
+    /* ═══════════════ SCROLL REVEAL ═══════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
+    @media (min-width: 600px) {
+      .hero-names { font-size: 60px; }
+      .envelope-wrapper { width: 320px; }
+      .envelope { height: 230px; }
+      .count-box { min-width: 80px; padding: 18px 14px; }
+      .count-box .num { font-size: 38px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ ENVELOPE SCREEN ═══════════════ -->
+  <div id="envelope-screen">
+    <div id="ambient-dots"></div>
+    <div class="envelope-wrapper" id="envelope-trigger">
+      <div class="envelope">
+        <div class="env-back"></div>
+        <div class="env-lining"></div>
+        <div class="env-card" id="env-card">
+          <span class="card-ornament">✦ ✦ ✦</span>
+          <span class="card-names">Mauricio<em> & </em>Maira</span>
+          <span class="card-date">14 · 07 · 2026</span>
+        </div>
+        <div class="env-front"></div>
+        <div class="env-flap" id="env-flap"></div>
+      </div>
+      <div class="wax-seal" id="wax-seal">M & M</div>
+    </div>
+    <p class="open-hint">— Toca para abrir —</p>
+  </div>
+
+  <!-- Burst particles container -->
+  <div id="burst-particles"></div>
+
+  <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+  <main id="content" class="hidden">
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="ornament">✦</div>
+      <h1 class="hero-names">Mauricio<span>&</span>Maira</h1>
+      <div class="ornament">✦</div>
+      <p class="hero-quote">
+        «Nos elegimos hoy y siempre.<br>
+        Queremos compartirlo con vos.»
+      </p>
+      <div class="hero-photo reveal">
+        <img src="assets/IMG_0783.jpeg" alt="Mauricio y Maira" loading="eager">
+      </div>
+      <div class="rings-photo reveal">
+        <img src="assets/Anillos.jpeg" alt="Nuestros anillos">
+      </div>
+    </section>
+
+    <!-- DETAILS -->
+    <section id="details">
+      <div class="detail-item reveal">
+        <span class="detail-icon">📅</span>
+        <h3>Martes 14 de Julio de 2026</h3>
+      </div>
+      <div class="detail-item reveal">
+        <span class="detail-icon">🕚</span>
+        <h3>11:15 hs</h3>
+      </div>
+      <div class="detail-item reveal">
+        <span class="detail-icon">💒</span>
+        <h3>Registro Civil de Ciudad Vieja</h3>
+        <p>Sarandí 428, Montevideo</p>
+      </div>
+      <button class="btn-calendar reveal" id="btn-calendar" aria-label="Agregar al calendario">
+        📥 Agregar al Calendario
+      </button>
+    </section>
+
+    <div class="ornament">✦</div>
+
+    <!-- COUNTDOWN -->
+    <section id="countdown">
+      <p class="countdown-label">Faltan</p>
+      <div class="countdown-timer">
+        <div class="count-box">
+          <span class="num" id="c-days">--</span>
+          <small>días</small>
+        </div>
+        <div class="count-box">
+          <span class="num" id="c-hours">--</span>
+          <small>horas</small>
+        </div>
+        <div class="count-box">
+          <span class="num" id="c-min">--</span>
+          <small>min</small>
+        </div>
+        <div class="count-box">
+          <span class="num" id="c-sec">--</span>
+          <small>seg</small>
+        </div>
+      </div>
+      <p class="countdown-label">para el gran día</p>
+    </section>
+
+    <!-- PHOTO DIVIDER -->
+    <div class="photo-divider">
+      <img src="assets/IMG_0779.jpeg" alt="" loading="lazy" decoding="async">
+    </div>
+
+    <!-- LOCATION -->
+    <section id="location">
+      <h2 class="reveal">📍 ¿Cómo llegar?</h2>
+      <div class="map-wrap reveal">
+        <iframe
+          src="https://maps.google.com/maps?q=Sarandi+428,+Ciudad+Vieja,+Montevideo,+Uruguay&z=16&output=embed"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Mapa - Registro Civil de Ciudad Vieja">
+        </iframe>
+      </div>
+      <p class="location-address reveal">
+        Registro Civil de Ciudad Vieja<br>
+        Sarandí 428, 11000 Montevideo
+      </p>
+      <a href="https://www.google.com/maps/search/?api=1&query=Sarandi+428+Ciudad+Vieja+Montevideo+Uruguay"
+         target="_blank" rel="noopener" class="btn-map reveal">
+        🗺️ Abrir en Google Maps
+      </a>
+    </section>
+
+    <div class="ornament">✦</div>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <h2 class="reveal">Nuestra Historia</h2>
+      <div class="gallery-grid">
+        <div class="g-item reveal"><img src="assets/IMG_0787.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/IMG_0793.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/IMG_0780.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/IMG_0789.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/9B3301AC-4F46-4040-93CA-399CE52BB0E6.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/IMG_0794.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+        <div class="g-item reveal"><img src="assets/IMG_0785.jpeg" alt="Mauricio y Maira" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
+    <!-- CELEBRATION & DRESS CODE -->
+    <section id="celebration">
+      <p class="intimate-msg reveal">
+        «Luego de la ceremonia, celebraremos de forma íntima.»
+      </p>
+      <div class="ornament">✦</div>
+      <div class="dresscode reveal" style="margin-top:20px;">
+        <h3>👔 Código de vestimenta</h3>
+        <p>Elegante / Formal relajado</p>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp">
+      <h2 class="reveal">¿Nos acompañás?</h2>
+      <a href="https://wa.me/59892305232?text=Confirmo%20mi%20asistencia%20al%20casamiento%20💍"
+         target="_blank" rel="noopener" class="btn-rsvp reveal" id="rsvp-btn">
+        💬 Confirmar asistencia
+      </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-initials">M & M</div>
+      <p class="footer-date">14 · 07 · 2026</p>
+      <p class="footer-love">Hecho con 💕</p>
+    </footer>
+  </main>
+
+  <!-- ═══════════════ FLOATING CONTROLS ═══════════════ -->
+  <button class="music-btn hidden" id="music-btn" aria-label="Pausar/reanudar música">🎵</button>
+  <div class="fixed-rsvp hidden" id="fixed-rsvp">
+    <a href="https://wa.me/59892305232?text=Confirmo%20mi%20asistencia%20al%20casamiento%20💍"
+       target="_blank" rel="noopener">
+      💍 Confirmar asistencia
+    </a>
+  </div>
+
+  <!-- ═══════════════ AUDIO ═══════════════ -->
+  <audio id="bg-music" loop preload="none">
+    <source src="assets/musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    /* ─── DOM Elements ─── */
+    const envelopeScreen = document.getElementById('envelope-screen');
+    const envTrigger = document.getElementById('envelope-trigger');
+    const envFlap = document.getElementById('env-flap');
+    const envCard = document.getElementById('env-card');
+    const waxSeal = document.getElementById('wax-seal');
+    const burstContainer = document.getElementById('burst-particles');
+    const content = document.getElementById('content');
+    const musicBtn = document.getElementById('music-btn');
+    const fixedRsvp = document.getElementById('fixed-rsvp');
+    const bgMusic = document.getElementById('bg-music');
+    let isOpening = false;
+    let musicPlaying = false;
+
+    /* ─── Ambient Dots ─── */
+    (function createAmbientDots() {
+      const c = document.getElementById('ambient-dots');
+      for (let i = 0; i < 25; i++) {
+        const d = document.createElement('div');
+        d.className = 'ambient-dot';
+        d.style.left = Math.random() * 100 + '%';
+        d.style.top = Math.random() * 100 + '%';
+        d.style.animationDelay = (Math.random() * 5) + 's';
+        d.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        c.appendChild(d);
+      }
+    })();
+
+    /* ─── Envelope Open ─── */
+    envTrigger.addEventListener('click', function() {
+      if (isOpening) return;
+      isOpening = true;
+
+      // Phase 1: Break seal
+      waxSeal.classList.add('break');
+
+      // Phase 2: Open flap
+      setTimeout(function() { envFlap.classList.add('open'); }, 400);
+
+      // Phase 3: Rise card
+      setTimeout(function() { envCard.classList.add('rise'); }, 850);
+
+      // Phase 4: Burst particles
+      setTimeout(createBurst, 600);
+
+      // Phase 5: Start music
+      setTimeout(startMusic, 500);
+
+      // Phase 6: Transition to content
+      setTimeout(function() {
+        envelopeScreen.classList.add('fade-out');
+        content.classList.remove('hidden');
+        // Force reflow
+        content.offsetHeight;
+        content.classList.add('show');
+        document.body.classList.add('scrollable');
+        musicBtn.classList.remove('hidden');
+        fixedRsvp.classList.remove('hidden');
+      }, 2200);
+
+      // Phase 7: Cleanup
+      setTimeout(function() {
+        envelopeScreen.style.display = 'none';
+        burstContainer.innerHTML = '';
+      }, 3200);
+    });
+
+    /* ─── Burst Particles ─── */
+    function createBurst() {
+      var colors = ['#D4A847','#B76E79','#C5A55A','#E8C999','#DDB892','#F5E6D3'];
+      for (var i = 0; i < 45; i++) {
+        var p = document.createElement('div');
+        var size = Math.random() * 8 + 4;
+        var dx = (Math.random() - 0.5) * 180;
+        var rot = Math.random() * 720;
+        p.style.cssText =
+          'position:absolute;left:' + (Math.random()*100) + '%;top:-10px;' +
+          'width:' + size + 'px;height:' + (size*1.4) + 'px;' +
+          'background:' + colors[Math.floor(Math.random()*colors.length)] + ';' +
+          'border-radius:50% 0 50% 0;opacity:0;' +
+          '--dx:' + dx + 'px;--rot:' + rot + 'deg;' +
+          'animation:burstFall ' + (Math.random()*2+2.5) + 's ease-out ' + (Math.random()*1.2) + 's forwards;';
+        burstContainer.appendChild(p);
+      }
+    }
+
+    /* ─── Music Control ─── */
+    function startMusic() {
+      bgMusic.volume = 0;
+      bgMusic.play().then(function() {
+        musicPlaying = true;
+        musicBtn.textContent = '🎵';
+        musicBtn.classList.remove('paused');
+        // Fade in to 0.7
+        var vol = 0;
+        var fade = setInterval(function() {
+          vol += 0.05;
+          if (vol >= 0.7) { vol = 0.7; clearInterval(fade); }
+          bgMusic.volume = vol;
+        }, 150);
+      }).catch(function(e) {
+        console.log('Audio autoplay blocked:', e);
+        musicBtn.textContent = '🔇';
+        musicBtn.classList.add('paused');
+      });
+    }
+
+    musicBtn.addEventListener('click', function() {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicPlaying = false;
+        musicBtn.textContent = '🔇';
+        musicBtn.classList.add('paused');
+      } else {
+        bgMusic.play().then(function() {
+          bgMusic.volume = 0.7;
+          musicPlaying = true;
+          musicBtn.textContent = '🎵';
+          musicBtn.classList.remove('paused');
+        });
+      }
+    });
+
+    /* ─── Countdown Timer ─── */
+    var weddingDate = new Date('2026-07-14T11:15:00-03:00').getTime();
+    function updateCountdown() {
+      var now = Date.now();
+      var diff = weddingDate - now;
+      if (diff <= 0) {
+        document.getElementById('c-days').textContent = '0';
+        document.getElementById('c-hours').textContent = '0';
+        document.getElementById('c-min').textContent = '0';
+        document.getElementById('c-sec').textContent = '0';
+        return;
+      }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('c-days').textContent = d;
+      document.getElementById('c-hours').textContent = h;
+      document.getElementById('c-min').textContent = String(m).padStart(2,'0');
+      document.getElementById('c-sec').textContent = String(s).padStart(2,'0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    /* ─── Add to Calendar ─── */
+    document.getElementById('btn-calendar').addEventListener('click', function() {
+      var ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Casamiento M&M//ES',
+        'BEGIN:VEVENT',
+        'DTSTART:20260714T141500Z',
+        'DTEND:20260714T161500Z',
+        'SUMMARY:Casamiento Mauricio & Maira 💍',
+        'LOCATION:Registro Civil de Ciudad Vieja\\, Sarandí 428\\, Montevideo',
+        'DESCRIPTION:Casamiento de Mauricio y Maira - ¡Nos casamos!',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+      var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'casamiento-mauricio-maira.ics';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    /* ─── Scroll Reveal ─── */
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
