@@ -164,22 +164,7 @@
       <p style="margin-bottom:20px;">Subí fotos que sacaste hoy, o dejanos un mensaje.</p>
       
       <div class="interactive-box">
-        <h3>1. Subí tus fotos 📸</h3>
-        <p style="font-size:14px; margin-bottom:10px;">Compartí en modo "cámara descartable".</p>
-        <label for="camera-input" class="camera-label">Subir desde la Galería</label>
-        <input type="file" id="camera-input" class="camera-upload" multiple accept="image/*">
-        <div id="upload-status" style="font-size:13px; margin-top:5px; color:var(--rose);"></div>
-      </div>
-
-      <div class="interactive-box">
-        <h3>2. Mensaje de Voz 🎙️</h3>
-        <p style="font-size:14px; margin-bottom:10px;">Tocá para grabar 30 segundos.</p>
-        <button class="mic-btn" id="mic-btn">🎙️</button>
-        <div id="mic-status" style="font-size:13px; margin-top:5px;"></div>
-      </div>
-
-      <div class="interactive-box">
-        <h3>3. Libro de Firmas 📝</h3>
+        <h3>Libro de Firmas 📝</h3>
         <input type="text" id="gb-name" placeholder="Tu Nombre">
         <textarea id="gb-msg" placeholder="¡Escribí unas palabras hermosas!" rows="3"></textarea>
         <button class="btn" id="btn-firma">Dejar Firma</button>
@@ -219,23 +204,20 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
-
-    // ✅ INYECTANDO CONFIGURACIÓN DE MAURICIO
+    // ✅ INYECTANDO CONFIGURACIÓN DE MAURICIO (V2 sin tarjeta)
     const firebaseConfig = {
-      apiKey: "AIzaSyALGM_ySh54Ug-MYthpubO_xjodON8tnFo",
-      authDomain: "casamientomairamauri.firebaseapp.com",
-      projectId: "casamientomairamauri",
-      storageBucket: "casamientomairamauri.firebasestorage.app",
-      messagingSenderId: "1035722082552",
-      appId: "1:1035722082552:web:38fdf07af7a9297e3a530d",
-      measurementId: "G-007HP1SMDJ"
+      apiKey: "AIzaSyCjIweRviHEtby_Mb_t5_a4mMJ7aqRWjUo",
+      authDomain: "casamientov2.firebaseapp.com",
+      projectId: "casamientov2",
+      storageBucket: "casamientov2.firebasestorage.app",
+      messagingSenderId: "990863219206",
+      appId: "1:990863219206:web:8eefaad1ab73b5ca604187",
+      measurementId: "G-DXM0NSFKGR"
     };
 
     // Inicializar app
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
 
     // Util: Toast
     function showToast(msg) {
@@ -276,68 +258,7 @@
       showToast("¡Firma guardada!");
     });
 
-    /* --- LÓGICA DE FOTOS (CAMERA UPLOAD) --- */
-    document.getElementById('camera-input').addEventListener('change', async (e) => {
-      const files = e.target.files;
-      const status = document.getElementById('upload-status');
-      if(files.length === 0) return;
-      
-      status.innerText = "⏳ Subiendo fotos...";
-      for(let file of files) {
-        const path = "fotos_nuestra_boda/" + Date.now() + "_" + file.name;
-        const sRef = ref(storage, path);
-        await uploadBytes(sRef, file);
-      }
-      status.innerText = "✅ ¡Fotos subidas a Firebase!";
-      showToast("Gracias por el recuerdo 📸");
-    });
 
-    /* --- LÓGICA VOICEMAIL (AUDIO) --- */
-    let mediaRecorder; let audioChunks = [];
-    const micBtn = document.getElementById('mic-btn');
-    const micStatus = document.getElementById('mic-status');
-
-    micBtn.addEventListener('click', async () => {
-      // Pedir nombre antes
-      const n = document.getElementById('gb-name').value;
-      if(!n) return alert("Poné tu nombre arriba antes de grabar audio 🎙️");
-
-      if (micBtn.classList.contains('recording')) {
-        // Pausar y Guardar
-        mediaRecorder.stop();
-        micBtn.classList.remove('recording');
-        micStatus.innerText = "⏳ Subiendo audio...";
-      } else {
-        // Iniciar Grabación
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.start();
-          audioChunks = [];
-          micBtn.classList.add('recording');
-          micStatus.innerText = "🔴 Grabando... Tocá para enviar.";
-          
-          mediaRecorder.addEventListener("dataavailable", event => {
-            audioChunks.push(event.data);
-          });
-
-          mediaRecorder.addEventListener("stop", async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            // Subir a Firebase Storage
-            const sRef = ref(storage, "audios/" + Date.now() + "_" + n + ".webm");
-            await uploadBytes(sRef, audioBlob);
-            const url = await getDownloadURL(sRef);
-            
-            // Guardar firma con audio link
-            await addDoc(collection(db, "guestbook"), { nombre: n, mensaje: "🎤 Mensaje de voz", audioUrl: url, tipo: 'audio', fecha: serverTimestamp() });
-            
-            micStatus.innerText = "✅ Audio enviado a los novios!";
-            showToast("Buzón de voz entregado");
-          });
-        }).catch(err => {
-          alert("Permití el micrófono para dejar un mensaje.");
-        });
-      }
-    });
   </script>
 
   <script>
